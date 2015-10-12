@@ -77,7 +77,7 @@ getwifi = ->
 		do
 			query = sh "netsh wlan show interfaces"
 			matches = [l for l in *query when l\match "Signal"]
-		tonumber string.match matches[1], ":%s+(%d+)%%"
+		tonumber string.match (matches[1] or ""), ":%s+(%d+)%%"
 
 
 getstates = ->
