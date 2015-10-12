@@ -173,8 +173,16 @@ stats = ->
 	uptime, cpu, states, wifi = getuptime!, getcpu!, getstates!, getwifi!
 	mem, swap = getmemory!
 
+	wifi = 0 if not wifi
+
 	table.insert cpupast, cpu[1] / 100
 	table.insert mempast, mem / 100
+
+	for _, v in pairs {cpupast, mempast}
+		if #v == 61
+			for i = 1, 60
+				v[i] = v[i + 1]
+			v[61] = nil
 
 	struct = {
 		"\027[1;34m       0 \027[1;37m[%s\027[1;37m]  \027[0;36mTasks:  "
@@ -210,8 +218,12 @@ stats = ->
 
 	cpub, memb = (m2b cpugraph), (m2b memgraph)
 
+	io.write "\n"
+
 	for y = 1, #cpub
 		(y == #cpub and io.write or print) string.format "\027[1;34m  %s  \027[1;31m  %s", cpub[y], memb[y]
+
+io.write "\027[2J\027[?25l"
 
 while true
 	io.write("\027[0;0H\n")
